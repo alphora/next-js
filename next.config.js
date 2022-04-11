@@ -4,6 +4,7 @@ module.exports = (phase, { defaultConfig }) => {
      */
     const nextConfig = {
         /* config options here */
+        basePath: '/aphl/vsmanager',
     }
     return nextConfig
 }
