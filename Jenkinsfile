@@ -31,6 +31,18 @@ pipeline{
              }
             steps{
                 
+				echo "${INSTANCE_IP} before setting IP"
+
+                dir('terraform') {
+                    sh 'terraform init'
+                    script {
+                        INSTANCE_IP = sh (script: 'terraform output --raw instance_ip_addr', returnStdout: true).trim()
+                    }
+                    echo "${INSTANCE_IP} inside dir"
+                }
+                // validate IP is callable outside subdirectory
+                echo "${INSTANCE_IP} outside terraform dir"
+
                 sshagent(credentials : ['aphl_infrastructure']) {
                     
                     sh "ssh -o StrictHostKeyChecking=no ec2-user@${INSTANCE_IP} date"
