@@ -1,6 +1,3 @@
-def INSTANCE_IP = "0.0.0.0"
-def dockercompose = '''sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose'''
-
 pipeline{
 
 	agent any
@@ -27,33 +24,6 @@ pipeline{
 				}
 			}
     	}
-
-		stage ('Deploy') {
-            when { 
-                branch 'main'
-             }
-            steps{
-                
-				echo "${INSTANCE_IP} before setting IP"
-
-                dir('terraform') {
-                    sh 'terraform init'
-                    script {
-                        INSTANCE_IP = sh (script: 'terraform output --raw instance_ip_addr', returnStdout: true).trim()
-                    }
-                    echo "${INSTANCE_IP} inside dir"
-                }
-                // validate IP is callable outside subdirectory
-                echo "${INSTANCE_IP} outside terraform dir"
-
-                sshagent(credentials : ['aphl_infrastructure']) {
-                    
-                    sh "ssh -o StrictHostKeyChecking=no ec2-user@${INSTANCE_IP} date"
-                    
-                }
-            }
-        }
-
 		
 	}
 
