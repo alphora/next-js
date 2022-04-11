@@ -2,32 +2,30 @@ pipeline{
 
 	agent any
 
+	env.DOCKER_LABEL = 'develop'
+	
 	environment {
-		DOCKERHUB_CREDENTIALS=credentials('dockerhub-cred')
+		DOCKERHUB_CREDENTIALS=credentials('dockerhub-jpercival')
 	}
 
 	stages {
 
-		stage('Build') {
+		stage('Docker Build') {
 
 			steps {
-				sh 'docker build -t $DOCKER_HUB_REPO .'
+				sh "docker build -t contentgroup/vsm:${env.DOCKER_LABEL} ."
 			}
 		}
 
-		stage('Login') {
-
+		stage('Docker Push') {
+			
 			steps {
-				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+				withCredentials([usernamePassword(credentialsId: 'dockerhub-jpercival', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+				sh 'docker login -u $dockerHubUser -p $dockerHubPassword'
+				sh "docker push contentgroup/mypain:${env.DOCKER_LABEL}"
+				}
 			}
-		}
-
-		stage('Push') {
-
-			steps {
-				sh 'docker push $DOCKER_HUB_REPO'
-			}
-		}
+    	}
 	}
 
 	post {
