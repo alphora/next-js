@@ -20,7 +20,7 @@ pipeline{
 			steps {
 				withCredentials([usernamePassword(credentialsId: 'dockerhub-jpercival', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
 				sh 'docker login -u $dockerHubUser -p $dockerHubPassword'
-				sh "docker push contentgroup/mypain:${env.DOCKER_LABEL}"
+				sh "docker push contentgroup/vsm:develop"
 				}
 			}
     	}
