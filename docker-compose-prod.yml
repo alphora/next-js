@@ -1,0 +1,10 @@
+services:
+  nextapp:
+    image: fredyalmenares/nextapp:latest
+    ports:
+      - 3003:3003
+    command: ["yarn", "dev"]
+    environment:
+      - "NODE_ENV=development"
+    stdin_open: true
+    tty: true

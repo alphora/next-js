@@ -1,0 +1,13 @@
+services:
+  nextapp:
+    image: nextapp
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3003:3003
+    command: ["yarn", "dev"]
+    environment:
+      - "NODE_ENV=development"
+    stdin_open: true
+    tty: true
