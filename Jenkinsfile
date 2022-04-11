@@ -1,8 +1,6 @@
 pipeline{
 
 	agent any
-
-	env.DOCKER_LABEL = 'develop'
 	
 	environment {
 		DOCKERHUB_CREDENTIALS=credentials('dockerhub-jpercival')
@@ -13,7 +11,7 @@ pipeline{
 		stage('Docker Build') {
 
 			steps {
-				sh "docker build -t contentgroup/vsm:${env.DOCKER_LABEL} ."
+				sh "docker build -t contentgroup/vsm:develop ."
 			}
 		}
 
